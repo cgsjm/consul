@@ -4,8 +4,8 @@ page_title: Service-to-service permissions - Intentions
 sidebar_title: Service-to-service permissions - Intentions
 description: >-
   Intentions define access control for services via Connect and are used to
-  control which services may establish connections. Intentions can be managed
-  via the API, CLI, or UI.
+  control which services may establish connections or make requests. Intentions
+  can be managed via the API, CLI, or UI.
 ---
 
 # Intentions
@@ -14,16 +14,19 @@ description: >-
 later. The documentation for the legacy intentions system is
 [here](/docs/connect/intentions-legacy)
 
-Intentions define access control for services via Connect and are used
-to control which services may establish connections. Intentions can be
-managed via the API, CLI, or UI.
+Intentions define access control for services via Connect and are used to
+control which services may establish connections or make requests. Intentions
+can be managed via the API, CLI, or UI.
 
-Intentions are enforced by the [proxy](/docs/connect/proxies)
-or [natively integrated application](/docs/connect/native) on
-inbound connections. After verifying the TLS client certificate, the
-[authorize API endpoint](/api-docs/agent/connect#authorize) is called which verifies the connection
-is allowed by testing the intentions. If authorize returns false the
-connection must be terminated.
+Intentions are enforced by the [proxy](/docs/connect/proxies) or [natively
+integrated application](/docs/connect/native) on inbound connections or
+requests.
+
+The [intention match API](/api/connect/intentions#list-matching-intentions)
+should be periodically called to retrieve all relevant intentions for the
+target destination. After verifying the TLS client certificate, the cached
+intentions should be consulted for each incoming connection/request to
+determine if it should be accepted or rejected.
 
 The default intention behavior is defined by the default
 [ACL policy](https://learn.hashicorp.com/tutorials/consul/access-control-setup-production). If the default ACL policy is "allow all",
