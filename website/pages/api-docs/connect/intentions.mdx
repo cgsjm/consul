@@ -75,8 +75,9 @@ The table below shows this endpoint's support for
 
 ### PUT Body Parameters
 
-- `SourceType` `(string: <required>)` - The type for the `SourceName` value.
-  This can be only "consul" today to represent a Consul service.
+- `SourceType` `(string: "")` - The type for the `SourceName` value.
+  This can be only `"consul"` today to represent a Consul service. If not
+  provided, this will be defaulted to `"consul"`.
 
 - `Action` `(string: <required>)` - This is one of "allow" or "deny" for
   the action that should be taken if this intention matches a request.
@@ -197,8 +198,9 @@ The table below shows this endpoint's support for
 - `DestinationNS` `(string: "")` <EnterpriseAlert inline /> - The namespace for the
   `DestinationName` parameter.
 
-- `SourceType` `(string: <required>)` - The type for the `SourceName` value.
-  This can be only "consul" today to represent a Consul service.
+- `SourceType` `(string: "")` - The type for the `SourceName` value.
+  This can be only `"consul"` today to represent a Consul service. If not
+  provided, this will be defaulted to `"consul"`.
 
 - `Action` `(string: <required>)` - This is one of "allow" or "deny" for
   the action that should be taken if this intention matches a request.

@@ -198,8 +198,9 @@ Sources = [
   value](/docs/connect/intentions#precedence-and-match-order) computed from the
   source and destination naming components.
 
-- `Type` `(string: <required>)` - The type for the `Name` value. This can be
-  only `"consul"` today to represent a Consul service.
+- `Type` `(string: "")` - The type for the `Name` value. This can be
+  only `"consul"` today to represent a Consul service. If not provided, this
+  will be defaulted to `"consul"`.
 
 - `Description` `(string: "")` - Description for the intention. This is not
   used for anything by Consul, but is presented in API responses to assist
