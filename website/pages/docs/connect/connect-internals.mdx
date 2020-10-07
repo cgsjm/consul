@@ -69,12 +69,12 @@ accepted or rejected.
 
 ## Agent Caching and Performance
 
-To enable fast responses on [agent Connect API
-endpoints](/api/agent/connect), the Consul agent locally caches most
-Connect-related data and sets up background [blocking
-queries](/api/features/blocking) against the server to update the cache in
-the background. This allows most API calls such as retrieving certificates or
-authorizing connections to use in-memory data and respond very quickly.
+To enable fast responses on endpoints such as the [agent Connect
+API](/api/agent/connect), the Consul agent locally caches most Connect-related
+data and sets up background [blocking queries](/api/features/blocking) against
+the server to update the cache in the background. This allows most API calls
+such as retrieving certificates or authorizing connections to use in-memory
+data and respond very quickly.
 
 All data cached locally by the agent is populated on demand. Therefore, if
 Connect is not used at all, the cache does not store any data. On first request,
@@ -104,16 +104,16 @@ a long period of inactivity (3 days by default), the cache will empty itself.
 
 ## Connections Across Datacenters
 
-Sidecar proxy's [upstream configuration](/docs/connect/registration/service-registration#upstream-configuration-reference)
+A sidecar proxy's [upstream configuration](/docs/connect/registration/service-registration#upstream-configuration-reference)
 may specify an alternative datacenter or a prepared query that can address services
 in multiple datacenters (such as the [geo failover](https://learn.hashicorp.com/tutorials/consul/automate-geo-failover) pattern).
 
 [Intentions](/docs/connect/intentions) verify connections between services by
 source and destination name seamlessly across datacenters.
 
-Connections can be made via gateways to enable when communicating across
-network topologies allowing connections between services in each datacenter
-without externally routable IPs at the service level.
+Connections can be made via gateways to enable communicating across network
+topologies and allowing connections between services in each datacenter without
+externally routable IPs at the service level.
 
 ## Intention Replication
 
