@@ -144,59 +144,84 @@ Permission precedence is applied top to bottom.
   the authorization granted to those sources](#sourceintention). The order of
   this list does not matter, but out of convenience Consul will always store
   this reverse sorted by intention precedence, as that is the order that they
-  will be evaluated.
-  
-
-  routes to consider when
-  processing L7 requests. The first route to match in the list is terminal and
-  stops further evaluation. Traffic that fails to match any of the provided
-  routes will be routed to the default service.
-
-  - `Match` `(ServiceRouteMatch: <optional>)` - A set of criteria that can
-    match incoming L7 requests. If empty or omitted it acts as a catch-all.
-
-    - `HTTP` `(ServiceRouteHTTPMatch: <optional>)` - A set of
-      [http-specific match criteria](#serviceroutehttpmatch).
-
-  - `Destination` `(ServiceRouteDestination: <optional>)` - Controls [how to
-    proxy](#serviceroutedestination) the matching request(s) to a
-    service.
+  will be evaluated at enforcement time.
 
 ### `SourceIntention`
 
-- `Name` `(string: <required>)` - TODO
+- `Name` `(string: <required>)` - The source of the intention.
+  For a `Type` of `consul` this is the name of a Consul service. The service
+  doesn't need to be registered.
 
-- `Namespace` `(string: "default")` <EnterpriseAlert inline /> - TODO
+- `Namespace` `(string: "default")` <EnterpriseAlert inline /> - The namespace
+  for the `Name` parameter.
 
-- `Action` `(string: "")` - TODO one of "allow" or "deny"
+- `Action` `(string: "")` - For an L4 intention this is required, and should be
+  set to one of `"allow"` or `"deny"` for the action that should be taken if
+  this intention matches a request.
 
-- `Permissions` `(array<IntentionPermission>)` - TODO
+  This should be omiitted for an L7 intention as it is mutually exclusive with
+  the `Permissions` field.
 
-- The list of all [todo](#intentionpermission). The order of items in this list
-  is important. For any given request
-  the first permission to match in the list is terminal and stops further
-  evaluation.
+- `Permissions` `(array<IntentionPermission>)` - The list of all [additional L7
+  attributes](#intentionpermission) that extend the intention match criteria.
 
-  Traffic that fails to match any of the provided permissions in this intention
-  will be subject to the default intention/acl policy.
+  Permissions are interpreted in the order represented in the list. For any
+  given request the first permission to match in the list is terminal and stops
+  further evaluation. As with L4 intentions, traffic that fails to match any of
+  the provided permissions in this intention will be subject to the default
+  intention/acl policy.
 
-- `Precedence` `(int: <read-only>)` - TODO
+  This should be omitted for an L4 intention as it is mutually exclusive with
+  the `Action` field.
 
-- `Type` `(string: "consul")` - TODO
+- `Precedence` `(int: <read-only>)` - An [integer precedence
+  value](/docs/connect/intentions#precedence-and-match-order) computed from the
+  source and destination naming components.
 
-- `Description` `(string: "")` - TODO
+- `Type` `(string: <required>)` - The type for the `Name` value. This can be
+  only `"consul"` today to represent a Consul service.
 
-- `LegacyID` `(string: <read-only>)` - TODO
+- `Description` `(string: "")` - Description for the intention. This is not
+  used for anything by Consul, but is presented in API responses to assist
+  tooling.
 
-- `LegacyMeta` `(map<string|string>: <read-only>)` - TODO
+- `LegacyID` `(string: <read-only>)` - This is the UUID to uniquely identify
+  this intention in the system. Cannot be set directly and is exposed here as an artifact of
+  the config entry migration and is primarily used to allow legacy intention 
+  [API](/api-docs/connect/intentions#update-intention-by-id)
+  [endpoints](/api-docs/connect/intentions#read-specific-intention-by-id)
+  to continue to function for a period of time after ugprading to 1.9.0.
+  TODO(link-do-long-form-docs)
 
-- `LegacyCreateTime` `(time: optional)` - TODO
+- `LegacyMeta` `(map<string|string>: <read-only>)` - Specified arbitrary KV
+  metadata pairs attached to the intention, rather than to the enclosing config
+  entry. Cannot be set directly and is exposed here as an artifact of the
+  config entry migration and is primarily used to allow legacy intention
+  [API](/api-docs/connect/intentions#update-intention-by-id)
+  [endpoints](/api-docs/connect/intentions#read-specific-intention-by-id) to
+  continue to function for a period of time after ugprading to 1.9.0.
+  TODO(link-do-long-form-docs)
 
-- `LegacyUpdateTime` `(time: optional)` - TODO
+- `LegacyCreateTime` `(time: optional)` - The timestamp that this intention was
+  created. Cannot be set directly and is exposed here as an artifact of the
+  config entry migration and is primarily used to allow legacy intention
+  [API](/api-docs/connect/intentions#update-intention-by-id)
+  [endpoints](/api-docs/connect/intentions#read-specific-intention-by-id) to
+  continue to function for a period of time after ugprading to 1.9.0.
+  TODO(link-do-long-form-docs)
+
+- `LegacyUpdateTime` `(time: optional)` - The timestamp that this intention was
+  last updated. Cannot be set directly and is exposed here as an artifact of
+  the config entry migration and is primarily used to allow legacy intention
+  [API](/api-docs/connect/intentions#update-intention-by-id)
+  [endpoints](/api-docs/connect/intentions#read-specific-intention-by-id) to
+  continue to function for a period of time after ugprading to 1.9.0.
+  TODO(link-do-long-form-docs)
 
 ### `IntentionPermission`
 
-- `Action` `(string: <required>)` - TODO one of "allow" or "deny"
+- `Action` `(string: <required>)` - This is one of "allow" or "deny" for
+  the action that should be taken if this permission matches a request.
 
 - `HTTP` `(IntentionHTTPPermission: <required>)` - A set of
   [http-specific authorization criteria](#intentionhttppermission).
