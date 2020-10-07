@@ -716,9 +716,9 @@ The table below shows this endpoint's support for
 [agent caching](/api/features/caching), and
 [required ACLs](/api#authentication).
 
-| Blocking Queries | Consistency Modes | Agent Caching | ACL Required                  |
-| ---------------- | ----------------- | ------------- | ----------------------------- |
-| `NO`             | `none`            | `none`        | `intentions:read`<sup>1</sup> |
+| Blocking Queries | Consistency Modes | Agent Caching        | ACL Required                  |
+| ---------------- | ----------------- | -------------------- | ----------------------------- |
+| `YES`            | `all`             | `background refresh` | `intentions:read`<sup>1</sup> |
 
 <p>
   <sup>1</sup> Intention ACL rules are specified as part of a `service` rule.
