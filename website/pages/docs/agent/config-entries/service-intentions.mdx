@@ -228,24 +228,28 @@ Permission precedence is applied top to bottom.
 
 ### `IntentionHTTPPermission`
 
-- `PathExact` `(string: "")` - Exact path to match on the HTTP request path. (TODO)
+- `PathExact` `(string: "")` - Exact path to match on the HTTP request path.
 
   At most only one of `PathExact`, `PathPrefix`, or `PathRegex` may be configured.
 
-- `PathPrefix` `(string: "")` - Path prefix to match on the HTTP request path. (TODO)
+- `PathPrefix` `(string: "")` - Path prefix to match on the HTTP request path.
 
-      At most only one of `PathExact`, `PathPrefix`, or `PathRegex` may be configured.
+  At most only one of `PathExact`, `PathPrefix`, or `PathRegex` may be configured.
 
 - `PathRegex` `(string: "")` - Regular expression to match on the HTTP
-  request path. (TODO)
+  request path.
 
   The syntax is [described below](#regular-expression-syntax).
 
   At most only one of `PathExact`, `PathPrefix`, or `PathRegex` may be configured.
 
-- `Header` `(array<IntentionHTTPPermission>)` - A set of criteria that can
+- `Methods` `(array<string>)` - A list of HTTP methods for which this match
+  applies. If unspecified all http methods are matched.
+  If provided the names must be [valid](https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods).
+
+- `Header` `(array<IntentionHTTPHeaderPermission>)` - A set of criteria that can
   match on HTTP request headers. If more than one is configured all must match
-  for the overall match to apply. TODO
+  for the overall match to apply.
 
   - `Name` `(string: <required>)` - Name of the header to match.
 
@@ -283,23 +287,19 @@ Permission precedence is applied top to bottom.
 
   - `Invert` `(bool: false)` - Inverts the logic of the match.
 
-- `Methods` `(array<string>)` - A list of HTTP methods for which this match
-  applies. If unspecified all http methods are matched. TODO
-
 ## ACLs
-
-TODO
 
 Configuration entries may be protected by
 [ACLs](https://learn.hashicorp.com/tutorials/consul/access-control-setup-production).
 
-Reading a `service-router` config entry requires `service:read` on itself.
+Reading a `service-intentions` config entry requires `intentions:read` on itself.
 
-Creating, updating, or deleting a `service-router` config entry requires
-`service:write` on itself and `service:read` on any other service referenced by
-name in these fields:
+Creating, updating, or deleting a `service-intentions` config entry requires
+`intentions:write` on itself.
 
-- [`Routes[].Destination.Service`](#service)
+Intention ACL rules are specified as part of a `service` rule. See [Intention
+Management Permissions](/docs/connect/intentions#intention-management-permissions) for
+more details.
 
 ## Regular Expression Syntax
 
@@ -307,9 +307,4 @@ The actual syntax of the regular expression fields described here is entirely
 proxy-specific.
 
 When using [Envoy](/docs/connect/proxies/envoy) as a proxy, the syntax for
-these fields is version specific:
-
-| Envoy Version   | Syntax |
-| --------------- | -------------------- |
-| 1.11.2 or newer | [documentation](https://github.com/google/re2/wiki/Syntax) |
-| 1.11.1 or older | [documentation](https://en.cppreference.com/w/cpp/regex/ecmascript) |
+these fields is [RE2](https://github.com/google/re2/wiki/Syntax).

@@ -156,7 +156,7 @@ Routes = [
 
 - `PathPrefix` `(string: "")` - Path prefix to match on the HTTP request path.
 
-      At most only one of `PathExact`, `PathPrefix`, or `PathRegex` may be configured.
+  At most only one of `PathExact`, `PathPrefix`, or `PathRegex` may be configured.
 
 - `PathRegex` `(string: "")` - Regular expression to match on the HTTP
   request path.
@@ -164,6 +164,10 @@ Routes = [
   The syntax is [described below](#regular-expression-syntax).
 
   At most only one of `PathExact`, `PathPrefix`, or `PathRegex` may be configured.
+
+- `Methods` `(array<string>)` - A list of HTTP methods for which this match
+  applies. If unspecified all http methods are matched.
+  If provided the names must be [valid](https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods).
 
 - `Header` `(array<ServiceRouteHTTPMatchHeader>)` - A set of criteria that can
   match on HTTP request headers. If more than one is configured all must match
@@ -227,9 +231,6 @@ Routes = [
     The syntax is [described below](#regular-expression-syntax).
 
     At most only one of `Exact`, `Regex`, or `Present` may be configured.
-
-- `Methods` `(array<string>)` - A list of HTTP methods for which this match
-  applies. If unspecified all http methods are matched.
 
 ### `ServiceRouteDestination`
 
