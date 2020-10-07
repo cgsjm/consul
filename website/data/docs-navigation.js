@@ -60,6 +60,7 @@ export default [
         content: ['service-registration', 'sidecar-service'],
       },
       'intentions',
+      'intentions-legacy',
       'observability',
       {
         category: 'l7-traffic',

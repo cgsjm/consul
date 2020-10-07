@@ -1,18 +1,23 @@
 ---
 layout: docs
-page_title: Service-to-service permissions - Intentions
-sidebar_title: Service-to-service permissions - Intentions
+page_title: Service-to-service permissions - Intentions (Legacy Mode)
+sidebar_title: Service-to-service permissions - Intentions (Legacy Mode)
 description: >-
   Intentions define access control for services via Connect and are used to
   control which services may establish connections. Intentions can be managed
   via the API, CLI, or UI.
 ---
 
-# Intentions
+# Intentions in Legacy Mode
 
--> **1.9.0 and later:** This guide only applies in Consul versions 1.9.0 and
-later. The documentation for the legacy intentions system is
-[here](/docs/connect/intentions-legacy)
+-> **1.8.x and earlier:** This document only applies in Consul versions 1.8.x
+and before. If you are using version 1.9.0 or later please use the updated
+documentation [here](/docs/connect/intentions)
+
+~> **Alert: Deprecation Notice** The intentions system described here was
+Consul's original intentions implementation. In Consul 1.9.0 the intentions
+system was rewritten and the legacy system was deprecated. The new ACL system
+information can be found [here](/docs/connect/intentions).
 
 Intentions define access control for services via Connect and are used
 to control which services may establish connections. Intentions can be
