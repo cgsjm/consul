@@ -1,0 +1,290 @@
+---
+layout: docs
+page_title: 'Configuration Entry Kind: Service Intentions'
+sidebar_title: service-intentions <sup>Beta</sup>
+description: >-
+  The service-intentions config entry kind controls Connect traffic
+  authorization for both networking layer 4 (e.g. TCP) and networking layer 7
+  (e.g. HTTP).
+---
+
+# Service Intentions <sup>Beta</sup>
+
+-> **1.9.0+:** This config entry is available in Consul versions 1.9.0 and newer.
+
+The `service-intentions` config entry kind controls Connect traffic
+authorization for both networking layer 4 (e.g. TCP) and networking layer 7
+(e.g. HTTP).
+
+Service intentions config entries represent a collection of
+[intentions](/docs/connect/intentions) sharing a specific destination. All
+intentions governing access to a specific destination are stored in a single
+`service-intentions` config entry.
+
+A single config entry may define a mix of both L4 and L7 style intentions, but
+for a specific source L4 and L7 intentions are mutually exclusive. Only one
+will apply at a time. Default behavior for L4 is configurable (regardless of
+global setting) by defining a low precedence intention for that destination.
+
+## Interaction with other Config Entries
+
+- L7 intentions within a config entry are restricted to only destination services that define
+  their protocol as http-based via a corresponding
+  [`service-defaults`](/docs/agent/config-entries/service-defaults) config
+  entry or globally via
+  [`proxy-defaults`](/docs/agent/config-entries/proxy-defaults) .
+
+## Sample Config Entries
+TODO
+
+Route HTTP requests with a path starting with `/admin` to a different service:
+
+```hcl
+Kind = "service-router"
+Name = "web"
+Routes = [
+  {
+    Match {
+      HTTP {
+        PathPrefix = "/admin"
+      }
+    }
+
+    Destination {
+      Service = "admin"
+    }
+  },
+  # NOTE: a default catch-all will send unmatched traffic to "web"
+]
+```
+
+Route HTTP requests with a special url parameter or header to a canary subset:
+
+```hcl
+Kind = "service-router"
+Name = "web"
+Routes = [
+  {
+    Match {
+      HTTP {
+        Header = [
+          {
+            Name  = "x-debug"
+            Exact = "1"
+          },
+        ]
+      }
+    }
+    Destination {
+      Service       = "web"
+      ServiceSubset = "canary"
+    }
+  },
+  {
+    Match {
+      HTTP {
+        QueryParam = [
+          {
+            Name  = "x-debug"
+            Exact = "1"
+          },
+        ]
+      }
+    }
+    Destination {
+      Service       = "web"
+      ServiceSubset = "canary"
+    }
+  },
+  # NOTE: a default catch-all will send unmatched traffic to "web"
+]
+```
+
+Re-route a gRPC method to another service. Since gRPC method calls [are
+HTTP2](https://github.com/grpc/grpc/blob/master/doc/PROTOCOL-HTTP2.md), we can use an HTTP path match rule to re-route traffic:
+
+```hcl
+Kind = "service-router"
+Name = "billing"
+Routes = [
+  {
+    Match {
+      HTTP {
+        PathExact = "/mycompany.BillingService/GenerateInvoice"
+      }
+    }
+
+    Destination {
+      Service = "invoice-generator"
+    }
+  },
+  # NOTE: a default catch-all will send unmatched traffic to "billing"
+]
+```
+
+## Available Fields
+TODO
+
+TODO
+Permission precedence is applied top to bottom.
+
+- `Kind` - Must be set to `service-intentions`
+
+- `Name` `(string: <required>)` - The destination of all intentions defined in
+  this config entry. This may be set to the wildcard character (`*`) to match
+  all services that don't otherwise have intentions defined.
+
+- `Namespace` `(string: "default")` <EnterpriseAlert inline /> - Specifies the namespace the config entry will apply to.
+  This may be set to the wildcard character (`*`) to match
+  all services in all namespaces that don't otherwise have intentions defined.
+
+- `Meta` `(map<string|string>: nil)` - Specifies arbitrary KV metadata pairs.
+
+- `Sources` `(array<SourceIntention>)` - The list of all [intention sources and 
+  the authorization granted to those sources](#sourceintention). The order of
+  this list does not matter, but out of convenience Consul will always store
+  this reverse sorted by intention precedence, as that is the order that they
+  will be evaluated.
+  
+
+  routes to consider when
+  processing L7 requests. The first route to match in the list is terminal and
+  stops further evaluation. Traffic that fails to match any of the provided
+  routes will be routed to the default service.
+
+  - `Match` `(ServiceRouteMatch: <optional>)` - A set of criteria that can
+    match incoming L7 requests. If empty or omitted it acts as a catch-all.
+
+    - `HTTP` `(ServiceRouteHTTPMatch: <optional>)` - A set of
+      [http-specific match criteria](#serviceroutehttpmatch).
+
+  - `Destination` `(ServiceRouteDestination: <optional>)` - Controls [how to
+    proxy](#serviceroutedestination) the matching request(s) to a
+    service.
+
+### `SourceIntention`
+
+- `Name` `(string: <required>)` - TODO
+
+- `Namespace` `(string: "default")` <EnterpriseAlert inline /> - TODO
+
+- `Action` `(string: "")` - TODO one of "allow" or "deny"
+
+- `Permissions` `(array<IntentionPermission>)` - TODO
+
+- The list of all [todo](#intentionpermission). The order of items in this list
+  is important. For any given request
+  the first permission to match in the list is terminal and stops further
+  evaluation.
+
+  Traffic that fails to match any of the provided permissions in this intention
+  will be subject to the default intention/acl policy.
+
+- `Precedence` `(int: <read-only>)` - TODO
+
+- `Type` `(string: "consul")` - TODO
+
+- `Description` `(string: "")` - TODO
+
+- `LegacyID` `(string: <read-only>)` - TODO
+
+- `LegacyMeta` `(map<string|string>: <read-only>)` - TODO
+
+- `LegacyCreateTime` `(time: optional)` - TODO
+
+- `LegacyUpdateTime` `(time: optional)` - TODO
+
+### `IntentionPermission`
+
+- `Action` `(string: <required>)` - TODO one of "allow" or "deny"
+
+- `HTTP` `(IntentionHTTPPermission: <required>)` - A set of
+  [http-specific authorization criteria](#intentionhttppermission).
+
+### `IntentionHTTPPermission`
+
+- `PathExact` `(string: "")` - Exact path to match on the HTTP request path. (TODO)
+
+  At most only one of `PathExact`, `PathPrefix`, or `PathRegex` may be configured.
+
+- `PathPrefix` `(string: "")` - Path prefix to match on the HTTP request path. (TODO)
+
+      At most only one of `PathExact`, `PathPrefix`, or `PathRegex` may be configured.
+
+- `PathRegex` `(string: "")` - Regular expression to match on the HTTP
+  request path. (TODO)
+
+  The syntax is [described below](#regular-expression-syntax).
+
+  At most only one of `PathExact`, `PathPrefix`, or `PathRegex` may be configured.
+
+- `Header` `(array<IntentionHTTPPermission>)` - A set of criteria that can
+  match on HTTP request headers. If more than one is configured all must match
+  for the overall match to apply. TODO
+
+  - `Name` `(string: <required>)` - Name of the header to match.
+
+  - `Present` `(bool: false)` - Match if the header with the given name is
+    present with any value.
+
+    At most only one of `Exact`, `Prefix`, `Suffix`, `Regex`, or `Present`
+    may be configured.
+
+  - `Exact` `(string: "")` - Match if the header with the given name is this
+    value.
+
+    At most only one of `Exact`, `Prefix`, `Suffix`, `Regex`, or `Present`
+    may be configured.
+
+  - `Prefix` `(string: "")` - Match if the header with the given name has
+    this prefix.
+
+    At most only one of `Exact`, `Prefix`, `Suffix`, `Regex`, or `Present`
+    may be configured.
+
+  - `Suffix` `(string: "")` - Match if the header with the given name has
+    this suffix.
+
+    At most only one of `Exact`, `Prefix`, `Suffix`, `Regex`, or `Present`
+    may be configured.
+
+  - `Regex` `(string: "")` - Match if the header with the given name matches
+    this pattern.
+
+    The syntax is [described below](#regular-expression-syntax).
+
+    At most only one of `Exact`, `Prefix`, `Suffix`, `Regex`, or `Present`
+    may be configured.
+
+  - `Invert` `(bool: false)` - Inverts the logic of the match.
+
+- `Methods` `(array<string>)` - A list of HTTP methods for which this match
+  applies. If unspecified all http methods are matched. TODO
+
+## ACLs
+
+TODO
+
+Configuration entries may be protected by
+[ACLs](https://learn.hashicorp.com/tutorials/consul/access-control-setup-production).
+
+Reading a `service-router` config entry requires `service:read` on itself.
+
+Creating, updating, or deleting a `service-router` config entry requires
+`service:write` on itself and `service:read` on any other service referenced by
+name in these fields:
+
+- [`Routes[].Destination.Service`](#service)
+
+## Regular Expression Syntax
+
+The actual syntax of the regular expression fields described here is entirely
+proxy-specific.
+
+When using [Envoy](/docs/connect/proxies/envoy) as a proxy, the syntax for
+these fields is version specific:
+
+| Envoy Version   | Syntax |
+| --------------- | -------------------- |
+| 1.11.2 or newer | [documentation](https://github.com/google/re2/wiki/Syntax) |
+| 1.11.1 or older | [documentation](https://en.cppreference.com/w/cpp/regex/ecmascript) |

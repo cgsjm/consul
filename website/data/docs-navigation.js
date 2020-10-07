@@ -178,6 +178,7 @@ export default [
           'ingress-gateway',
           'proxy-defaults',
           'service-defaults',
+          'service-intentions',
           'service-resolver',
           'service-router',
           'service-splitter',

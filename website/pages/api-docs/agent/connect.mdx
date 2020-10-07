@@ -18,6 +18,14 @@ to optimize performance of Connect without having to make requests to the server
 
 ## Authorize
 
+-> **Note:** This endpoint will always treat intentions with `Permissions`
+defined as *deny* intentions during evaluation, as this endpoint is only suited
+for networking layer 4 (e.g. TCP) integration. 
+For performance and reliability reasons it is desirable to implement intention
+enforcement by listing [intentions that match the
+destination](/api/connect/intentions#list-matching-intentions) and representing
+them in the native configuration of the proxy itself (such as RBAC for Envoy).
+
 This endpoint tests whether a connection attempt is authorized between
 two services. This is the primary API that must be implemented by
 [proxies](/docs/connect/proxies) or

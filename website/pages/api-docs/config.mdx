@@ -38,15 +38,16 @@ The table below shows this endpoint's support for
   <sup>1</sup> The ACL required depends on the config entry kind being updated:
 </p>
 
-| Config Entry Kind   | Required ACL     |
-| ------------------- | ---------------- |
-| ingress-gateway     | `operator:write` |
-| proxy-defaults      | `operator:write` |
-| service-defaults    | `service:write`  |
-| service-resolver    | `service:write`  |
-| service-router      | `service:write`  |
-| service-splitter    | `service:write`  |
-| terminating-gateway | `operator:write` |
+| Config Entry Kind   | Required ACL       |
+| ------------------- | ------------------ |
+| ingress-gateway     | `operator:write`   |
+| proxy-defaults      | `operator:write`   |
+| service-defaults    | `service:write`    |
+| service-resolver    | `service:write`    |
+| service-router      | `service:write`    |
+| service-splitter    | `service:write`    |
+| terminating-gateway | `operator:write`   |
+| service-intentions  | `intentions:write` |
 
 ### Parameters
 
@@ -104,15 +105,16 @@ The table below shows this endpoint's support for
 
 <sup>1</sup> The ACL required depends on the config entry kind being read:
 
-| Config Entry Kind   | Required ACL   |
-| ------------------- | -------------- |
-| ingress-gateway     | `service:read` |
-| proxy-defaults      | `<none>`       |
-| service-defaults    | `service:read` |
-| service-resolver    | `service:read` |
-| service-router      | `service:read` |
-| service-splitter    | `service:read` |
-| terminating-gateway | `service:read` |
+| Config Entry Kind   | Required ACL      |
+| ------------------- | ----------------- |
+| ingress-gateway     | `service:read`    |
+| proxy-defaults      | `<none>`          |
+| service-defaults    | `service:read`    |
+| service-resolver    | `service:read`    |
+| service-router      | `service:read`    |
+| service-splitter    | `service:read`    |
+| terminating-gateway | `service:read`    |
+| service-intentions  | `intentions:read` |
 
 ### Parameters
 
@@ -171,15 +173,16 @@ The table below shows this endpoint's support for
 
 <sup>1</sup> The ACL required depends on the config entry kind being read:
 
-| Config Entry Kind   | Required ACL   |
-| ------------------- | -------------- |
-| ingress-gateway     | `service:read` |
-| proxy-defaults      | `<none>`       |
-| service-defaults    | `service:read` |
-| service-resolver    | `service:read` |
-| service-router      | `service:read` |
-| service-splitter    | `service:read` |
-| terminating-gateway | `service:read` |
+| Config Entry Kind   | Required ACL      |
+| ------------------- | ----------------- |
+| ingress-gateway     | `service:read`    |
+| proxy-defaults      | `<none>`          |
+| service-defaults    | `service:read`    |
+| service-resolver    | `service:read`    |
+| service-router      | `service:read`    |
+| service-splitter    | `service:read`    |
+| terminating-gateway | `service:read`    |
+| service-intentions  | `intentions:read` |
 
 ### Parameters
 
@@ -244,15 +247,16 @@ The table below shows this endpoint's support for
 
 <sup>1</sup> The ACL required depends on the config entry kind being deleted:
 
-| Config Entry Kind   | Required ACL     |
-| ------------------- | ---------------- |
-| ingress-gateway     | `operator:write` |
-| proxy-defaults      | `operator:write` |
-| service-defaults    | `service:write`  |
-| service-resolver    | `service:write`  |
-| service-router      | `service:write`  |
-| service-splitter    | `service:write`  |
-| terminating-gateway | `operator:write` |
+| Config Entry Kind   | Required ACL       |
+| ------------------- | ----------------   |
+| ingress-gateway     | `operator:write`   |
+| proxy-defaults      | `operator:write`   |
+| service-defaults    | `service:write`    |
+| service-resolver    | `service:write`    |
+| service-router      | `service:write`    |
+| service-splitter    | `service:write`    |
+| terminating-gateway | `operator:write  ` |
+| service-intentions  | `intentions:write` |
 
 ### Parameters
 
