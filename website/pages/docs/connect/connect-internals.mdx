@@ -40,10 +40,10 @@ the connection is encrypted and authorized.
 The destination service verifies the client certificate against the [public CA
 bundle](/api/connect/ca#list-ca-root-certificates). After verifying the
 certificate, the next step depends upon the configured application protocol of
-the destination service. TCP (L4) services must authorize incoming connections
+the destination service. TCP (L4) services must authorize incoming _connections_
 against the configured set of Consul [intentions](/docs/connect/intentions),
-whereas HTTP (L7) services must authorize incoming requests against those same
-intentions. If the intention check response successfully, either the
+whereas HTTP (L7) services must authorize incoming _requests_ against those same
+intentions. If the intention check responds successfully, the
 connection/request is established. Otherwise the connection/request is
 rejected.
 
