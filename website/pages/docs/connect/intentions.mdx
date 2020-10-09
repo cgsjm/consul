@@ -4,8 +4,7 @@ page_title: Service-to-service permissions - Intentions
 sidebar_title: Service-to-service permissions - Intentions
 description: >-
   Intentions define access control for services via Connect and are used to
-  control which services may establish connections or make requests. Intentions
-  can be managed via the API, CLI, or UI.
+  control which services may establish connections or make requests.
 ---
 
 # Intentions
@@ -22,6 +21,9 @@ Intentions are enforced by the [proxy](/docs/connect/proxies) or [natively
 integrated application](/docs/connect/native) on inbound connections or
 requests.
 
+You can define intentions to control Connect traffic authorization for both
+networking layer 4 (e.g. TCP) and networking layer 7 (e.g. HTTP).
+
 The [intention match API](/api/connect/intentions#list-matching-intentions)
 should be periodically called to retrieve all relevant intentions for the
 target destination. After verifying the TLS client certificate, the cached
@@ -35,21 +37,37 @@ is "deny all", then all Connect connections or requests are denied by default.
 
 ## Intention Basics
 
-Intentions can be managed via the [API](#), [CLI](#),
-or UI. Please see the respective documentation for each for full details
-on options, flags, etc.
+Intentions can be managed primarily via
+[`service-intentions`](/docs/agent/config-entries/service-intentions) config
+entries or the UI. Some simpler tasks can also be achieved with the older
+[API](/api-docs/connect/intentions) or [CLI](/commands/intention). Please see
+the respective documentation for each for full details on options, flags, etc.
+
 Below is an example of a basic intention to show the basic attributes
 of an intention. The full data model of an intention can be found in the
 [API documentation](#).
 
-```shell-session
-$ consul intention create -deny web db
-Created: web => db (deny)
+```hcl
+Kind = "service-intentions"
+Name = "db"
+Sources = [
+  {
+    Name   = "web"
+    Action = "deny"
+  },
+  {
+    Name   = "api"
+    Action = "allow"
+  }
+]
 ```
 
-The intention above is a deny intention with a source of "web" and
-destination of "db". This says that connections from web to db are not
-allowed and the connection will be rejected.
+This config entry defines two intentions with a common destination of "db". The
+first intention above is a deny intention with a source of "web". This says
+that connections from web to db are not allowed and the connection will be
+rejected. The second intention is an allow intention with a source of "api".
+This says that connections from api to db are allowed and connections will be
+accepted.
 
 When an intention is modified, existing connections will not be affected.
 This means that changing a connection from "allow" to "deny" today
