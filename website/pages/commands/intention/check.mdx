@@ -18,6 +18,10 @@ callers only need to have `service:read` access for the destination. Richer
 commands like [match](/commands/intention/match) require full
 intention read permissions and don't evaluate the result.
 
+-> **Note:** This command will always treat intentions with `Permissions`
+defined as *deny* intentions during evaluation, as this endpoint is only suited
+for networking layer 4 (e.g. TCP) integration.
+
 ## Usage
 
 Usage: `consul intention check [options] SRC DST`
