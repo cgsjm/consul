@@ -25,22 +25,23 @@ For inbound connections, the proxy must accept TLS connections on some port.
 The certificate served should be created by the
 [`/v1/agent/connect/ca/leaf/`](/api/agent/connect) API endpoint.
 The client certificate should be validated against the root certificates
-provided by the
-[`/v1/agent/connect/ca/roots`](/api/agent/connect) endpoint.
+provided by the [`/v1/agent/connect/ca/roots`](/api/agent/connect) endpoint. 
+The connections (L4) or requests (L7) should be validated against the
+intentions for the destination provided by the
+[`/v1/connect/intentions/match?by=destination`](/api/connect/intentions#list-matching-intentions)
+endpoint.
+
 After validating the client certificate from the caller, the proxy should
-call the
-[`/v1/agent/connect/authorize`](/api/agent/connect) endpoint to
-authorize the connection.
+consult the cached intentions for each incoming
+connection/request to determine if it should be accepted or rejected.
 
-All of these API endpoints operate on agent-local data that is updated
-in the background. The leaf and roots should be updated in the background
-by the proxy, but the authorize endpoint is expected to be called in the
-connection path. The endpoints introduce only microseconds of additional
-latency on the connection.
+All of these API endpoints operate on agent-local data that is updated in the
+background. The leaf, roots, and intentions should be updated in the background
+by the proxy.
 
-The leaf and root cert endpoints support blocking queries. These should be
-used if possible to get near-immediate updates for root cert rotations,
-leaf expiry, etc.
+The leaf cert, root cert, and intentions endpoints support blocking queries.
+These should be used if possible to get near-immediate updates for root cert
+rotations, leaf expiry, intention changes, etc.
 
 ## Establishing Outbound Connections
 

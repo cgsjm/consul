@@ -59,14 +59,6 @@ Connect endpoints](/api/agent/connect) implement local caching, background
 updating, and support blocking queries. Most API calls operate on purely local
 in-memory data.
 
-## Intention Authorization
-
-Services should periodically use the [intention match
-API](/api/connect/intentions#list-matching-intentions) to retrieve all relevant
-intentions with itself as a destination. These cached intentions should be
-consulted for each incoming connection/request to determine if it should be
-accepted or rejected.
-
 ## Agent Caching and Performance
 
 To enable fast responses on endpoints such as the [agent Connect
