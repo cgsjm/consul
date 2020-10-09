@@ -40,5 +40,6 @@ Usage: `consul intention match [options] SRC_OR_DST`
 ```shell-session
 $ consul intention match -source web
 web => db (deny)
+web => api (2 permissions)
 web => * (allow)
 ```
