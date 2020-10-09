@@ -29,7 +29,7 @@ global setting) by defining a low precedence intention for that destination.
 ## Interaction with other Config Entries
 
 - L7 intentions within a config entry are restricted to only destination services that define
-  their protocol as http-based via a corresponding
+  their protocol as HTTP-based via a corresponding
   [`service-defaults`](/docs/agent/config-entries/service-defaults) config
   entry or globally via
   [`proxy-defaults`](/docs/agent/config-entries/proxy-defaults) .
@@ -148,7 +148,7 @@ Sources = [
 
 ## Available Fields
 
-- `Kind` - Must be set to `service-intentions`
+- `Kind` - Must be set to `service-intentions`.
 
 - `Name` `(string: <required>)` - The destination of all intentions defined in
   this config entry. This may be set to the wildcard character (`*`) to match
@@ -189,7 +189,8 @@ Sources = [
   first permission to match in the list is terminal and stops further
   evaluation. As with L4 intentions, traffic that fails to match any of the
   provided permissions in this intention will be subject to the default
-  intention/acl policy.
+  intention behavior is defined by the default [ACL
+  policy](https://learn.hashicorp.com/tutorials/consul/access-control-setup-production).
 
   This should be omitted for an L4 intention as it is mutually exclusive with
   the `Action` field.
@@ -244,7 +245,7 @@ Sources = [
   the action that should be taken if this permission matches a request.
 
 - `HTTP` `(IntentionHTTPPermission: <required>)` - A set of
-  [http-specific authorization criteria](#intentionhttppermission).
+  [HTTP-specific authorization criteria](#intentionhttppermission).
 
 ### `IntentionHTTPPermission`
 
@@ -264,7 +265,7 @@ Sources = [
   At most only one of `PathExact`, `PathPrefix`, or `PathRegex` may be configured.
 
 - `Methods` `(array<string>)` - A list of HTTP methods for which this match
-  applies. If unspecified all http methods are matched.
+  applies. If unspecified all HTTP methods are matched.
   If provided the names must be [valid](https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods).
 
 - `Header` `(array<IntentionHTTPHeaderPermission>)` - A set of criteria that can

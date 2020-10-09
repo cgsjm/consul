@@ -24,7 +24,7 @@ service of the same name.
   Management](/docs/connect/l7-traffic-management).
 
 - Service router config entries are restricted to only services that define
-  their protocol as http-based via a corresponding
+  their protocol as HTTP-based via a corresponding
   [`service-defaults`](/docs/agent/config-entries/service-defaults) config
   entry or globally via
   [`proxy-defaults`](/docs/agent/config-entries/proxy-defaults) .
@@ -142,7 +142,7 @@ Routes = [
     match incoming L7 requests. If empty or omitted it acts as a catch-all.
 
     - `HTTP` `(ServiceRouteHTTPMatch: <optional>)` - A set of
-      [http-specific match criteria](#serviceroutehttpmatch).
+      [HTTP-specific match criteria](#serviceroutehttpmatch).
 
   - `Destination` `(ServiceRouteDestination: <optional>)` - Controls [how to
     proxy](#serviceroutedestination) the matching request(s) to a
@@ -166,7 +166,7 @@ Routes = [
   At most only one of `PathExact`, `PathPrefix`, or `PathRegex` may be configured.
 
 - `Methods` `(array<string>)` - A list of HTTP methods for which this match
-  applies. If unspecified all http methods are matched.
+  applies. If unspecified all HTTP methods are matched.
   If provided the names must be [valid](https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods).
 
 - `Header` `(array<ServiceRouteHTTPMatchHeader>)` - A set of criteria that can
@@ -259,7 +259,7 @@ Routes = [
 - `RetryOnConnectFailure` `(bool: false)` - Allows for connection failure
   errors to trigger a retry.
 
-- `RetryOnStatusCodes` `(array<int>)` - A flat list of http response status
+- `RetryOnStatusCodes` `(array<int>)` - A flat list of HTTP response status
   codes that are eligible for retry.
 
 ## ACLs
