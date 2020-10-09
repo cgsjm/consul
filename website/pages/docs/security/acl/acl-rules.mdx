@@ -214,7 +214,7 @@ event "deploy" {
 Event rules are segmented by the event name they apply to. In the example above, the rules allow
 read-only access to any event, and firing of the "deploy" event.
 
-The [`consul exec`](/docs/commands/exec) command uses events with the "\_rexec" prefix during
+The [`consul exec`](/commands/exec) command uses events with the "\_rexec" prefix during
 operation, so to enable this feature in a Consul environment with ACLs enabled, you will need to
 give agents a token with access to this event prefix, in addition to configuring
 [`disable_remote_exec`](/docs/agent/options#disable_remote_exec) to `false`.
