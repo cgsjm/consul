@@ -6,6 +6,12 @@ sidebar_title: delete
 
 # Consul Intention Delete
 
+-> **Deprecated** - The one arg (ID) form of this command is deprecated in
+Consul 1.9.0 in favor of using the [config entry CLI](/commands/config/write)
+to edit the underlying
+[`service-intentions`](/docs/agent/config-entries/service-intentions) config
+entry directly for the destination.
+
 Command: `consul intention delete`
 
 The `intention delete` command deletes a matching intention.
