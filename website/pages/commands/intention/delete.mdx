@@ -6,15 +6,14 @@ sidebar_title: delete
 
 # Consul Intention Delete
 
--> **Deprecated** - The one argument (ID) form of this command is deprecated in
-Consul 1.9.0 in favor of using the [config entry CLI](/commands/config/write)
-to edit the underlying
-[`service-intentions`](/docs/agent/config-entries/service-intentions) config
-entry directly for the destination.
-
 Command: `consul intention delete`
 
 The `intention delete` command deletes a matching intention.
+
+-> **Deprecated** - The one argument form of this command is deprecated in
+Consul 1.9.0 as intentions no longer need IDs when represented as
+[`service-intentions`](/docs/agent/config-entries/service-intentions) config
+entries.
 
 ## Usage
 
@@ -23,7 +22,7 @@ Usage:
 - `consul intention delete [options] SRC DST`
 - `consul intention delete [options] ID`
 
-`SRC` and `DST` can both take [several forms](/docs/commands/intention#source-and-destination-naming).
+`SRC` and `DST` can both take [several forms](/commands/intention#source-and-destination-naming).
 
 #### API Options
 
